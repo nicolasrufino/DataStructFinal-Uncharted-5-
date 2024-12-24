@@ -42,7 +42,7 @@ namespace TreasureHuntGame
             
             Inventory.Add("Water");
             Inventory.Add("Knife");
-
+            
             
             EquippedItem = "Knife";
 

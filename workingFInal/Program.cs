@@ -17,6 +17,8 @@ namespace TreasureHuntGame
             Console.WriteLine("2. Continue Game");
             Console.Write("Choose an option: ");
             string choice = Console.ReadLine();
+      //!!
+            // int parsedChoice = int.TryParse(choice());
 
             Hero hero = new Hero();
             Tree roomTree = new Tree();
@@ -205,7 +207,7 @@ namespace TreasureHuntGame
             Thread.Sleep(1000);
             TypewriterEffect("Use your skills: Strength for combat, Agility for traps, and Intelligence for puzzles.", 50);
             Thread.Sleep(1000);
-            TypewriterEffect("Press 'S' at any time to skip this intro.", 50);
+            TypewriterEffect("Press 'S' to continue...", 50);
 
             if (Console.ReadKey(true).Key == ConsoleKey.S) return;
         }

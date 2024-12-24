@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/nicolasrufino/Desktop/snowCollege/fall/dataStructures/DataStructuresClass/finalTryDatStruct/workingFInal/workingFInal.csproj",
+      "projectUniqueName": "/Users/nicolasrufino/Desktop/snowCollege/fall/dataStructures/DataStructuresClass/DataStructFinal-Uncharted-5-/workingFInal/workingFInal.csproj",
       "projectName": "workingFInal",
-      "projectPath": "/Users/nicolasrufino/Desktop/snowCollege/fall/dataStructures/DataStructuresClass/finalTryDatStruct/workingFInal/workingFInal.csproj",
+      "projectPath": "/Users/nicolasrufino/Desktop/snowCollege/fall/dataStructures/DataStructuresClass/DataStructFinal-Uncharted-5-/workingFInal/workingFInal.csproj",
       "packagesPath": "/Users/nicolasrufino/.nuget/packages/",
-      "outputPath": "/Users/nicolasrufino/Desktop/snowCollege/fall/dataStructures/DataStructuresClass/finalTryDatStruct/workingFInal/obj/",
+      "outputPath": "/Users/nicolasrufino/Desktop/snowCollege/fall/dataStructures/DataStructuresClass/DataStructFinal-Uncharted-5-/workingFInal/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/nicolasrufino/.nuget/NuGet/NuGet.Config"
