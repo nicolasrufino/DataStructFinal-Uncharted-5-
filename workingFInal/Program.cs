@@ -17,8 +17,8 @@ namespace TreasureHuntGame
             Console.WriteLine("2. Continue Game");
             Console.Write("Choose an option: ");
             string choice = Console.ReadLine();
-      //!!
-            // int parsedChoice = int.TryParse(choice());
+            int parsedChoice;
+
 
             Hero hero = new Hero();
             Tree roomTree = new Tree();
@@ -44,18 +44,39 @@ namespace TreasureHuntGame
             }
 
             int currentLevel = 1;
-            if (choice == "2" && File.Exists("game_save.txt"))
+
+            if (int.TryParse(choice, out parsedChoice))
             {
-                (hero, map, items, currentLevel) = LoadGame(levels);
-                Console.WriteLine("Game loaded successfully!");
-                Thread.Sleep(2000);
-            }
-            else if (choice == "1" && File.Exists("game_save.txt"))
-            {
-                map.LoadMapFromFile(currentLevel);
-                Console.WriteLine("Starting a new game...");
-                Thread.Sleep(2000);
-                ShowIntro();
+                switch (parsedChoice)
+                {
+                    case 1:
+                        map.LoadMapFromFile(currentLevel);
+                        Console.WriteLine("Starting a new game...");
+                        Thread.Sleep(2000);
+                        ShowIntro();
+                        break;
+                    case 2:
+                        if (File.Exists("game_save.txt"))
+                        {
+                            (hero, map, items, currentLevel) = LoadGame(levels);
+                            Console.WriteLine("Game loaded successfully!");
+                            Thread.Sleep(2000);
+                        }
+                        else
+                        {
+                            map.LoadMapFromFile(currentLevel);
+                            Console.WriteLine("There is not game recorded. A new game will begin.");
+                            Thread.Sleep(2000);
+                            ShowIntro();
+                        }
+                        break;
+                    default:
+                        map.LoadMapFromFile(currentLevel);
+                        Console.WriteLine("It seems that your input was incorrect. A new game will begin.");
+                        Thread.Sleep(2000);
+                        ShowIntro();
+                        break;
+                }
             }
             else
             {
@@ -63,7 +84,9 @@ namespace TreasureHuntGame
                 Console.WriteLine("It seems that your input was incorrect. A new game will begin.");
                 Thread.Sleep(2000);
                 ShowIntro();
+
             }
+
 
             bool gameRunning = true;
             int hungerTimer = 0;
@@ -275,7 +298,7 @@ namespace TreasureHuntGame
             return true;
         }
 
-        static void TypewriterEffect(string text, int delay = 50)
+        static void TypewriterEffect(string text, int delay = 15)
         {
             foreach (char c in text)
             {

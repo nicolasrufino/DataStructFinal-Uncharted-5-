@@ -98,27 +98,27 @@ namespace TreasureHuntGame
                 {
                     if (i == heroX && j == heroY)
                     {
-                        Console.Write("👤 "); // Hero 
+                        Console.Write("🚶‍♂️ "); // Hero 
                     }
                     else
                     {
                         Console.Write(MapGrid[i, j] switch
                         {
                             0 => "⬛ ", // empty space
-                            -1 => "🟩 ", // wall
+                            -1 => "🔳 ", // wall
                             2 => "🚪 ", // door
                             3 => "🗝️  ", //key
-                            25 => "💧 ", // water
+                            25 => "🥤 ", // water
                             5 => "⬛ ", // trap invisble ofc
                             6 => "💎 ", // jewel
-                            7 => "🍲 ", // food
-                            8 => "1️⃣  ", // transition to level 1
-                            9 => "2️⃣  ", // transition to level 2
-                            10 => "3️⃣  ", // transition to level 3
-                            11 => "4️⃣  ", // transition to level 4
-                            12 => "5️⃣  ", // transition to level 5
-                            13 => "6️⃣  ", // transition to level 6
-                            14 => "7️⃣  ", // transition to level 7
+                            7 => "🍗 ", // food
+                            8 => "⬛ ", // transition to level 1
+                            9 => "⬛ ", // transition to level 2
+                            10 => "⬛ ", // transition to level 3
+                            11 => "⬛ ", // transition to level 4
+                            12 => "⬛ ", // transition to level 5
+                            13 => "⬛ ", // transition to level 6
+                            14 => "⬛ ", // transition to level 7
                             _ => "⬜ "  // idk
                         });
                     }
