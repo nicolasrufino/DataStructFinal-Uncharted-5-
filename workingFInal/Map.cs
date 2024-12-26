@@ -120,6 +120,9 @@ namespace TreasureHuntGame
                     Console.WriteLine("You collected food!");
                     MapGrid[heroX, heroY] = 0; // convert to empty space
                     break;
+                case 5:
+                    MapGrid[heroX, heroY] = -1; // convert to wall
+                    break;
                 default:
                     // do nothing if not one of those tiles
                     break;
