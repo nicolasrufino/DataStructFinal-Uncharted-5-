@@ -10,9 +10,12 @@ namespace TreasureHuntGame
         public static void Main(string[] args)
         {
             Console.Clear();
-            Console.WriteLine("=====================================================");
-            Console.WriteLine("     UNCHARTED: BLACKBEARD'S FINAL DESTINATION");
-            Console.WriteLine("=====================================================");
+            Console.WriteLine("====================================================");
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("     UNCHARTED: BLACKBEARD'S FINAL DESTINATION      ");
+            Console.ResetColor();
+            Console.WriteLine("====================================================");
             Console.WriteLine("1. New Game");
             Console.WriteLine("2. Continue Game");
             Console.Write("Choose an option: ");
@@ -51,8 +54,14 @@ namespace TreasureHuntGame
                 {
                     case 1:
                         map.LoadMapFromFile(currentLevel);
-                        Console.WriteLine("Starting a new game...");
-                        Thread.Sleep(2000);
+                        Console.Clear();
+                        // Thread.Sleep(1000);
+                        Console.Write("Starting a new game");
+                        for (int i = 0; i < 4; i++)
+                        {
+                            Thread.Sleep(600);
+                            Console.Write(".");
+                        }
                         ShowIntro();
                         break;
                     case 2:
@@ -84,7 +93,6 @@ namespace TreasureHuntGame
                 Console.WriteLine("It seems that your input was incorrect. A new game will begin.");
                 Thread.Sleep(2000);
                 ShowIntro();
-
             }
 
 
@@ -142,14 +150,24 @@ namespace TreasureHuntGame
                     hungerTimer = 0;
                 }
 
-                Console.WriteLine("Move using W (up), A (left), S (down), D (right). Press Q to quit, or press TAB to use an item from the inventory.");
+                Console.WriteLine("Press 'Q' to quit & 'P' to save your game.\nPress TAB to use an item from the inventory.");
                 ConsoleKey key = Console.ReadKey(true).Key;
 
                 if (key == ConsoleKey.Q)
                 {
                     SaveGame(hero, map, items, currentLevel);
-                    Console.WriteLine("Game saved! Goodbye!");
+                    Console.Clear();
+                    bool skip = false;
+                    TypewriterEffect("Game saved! Goodbye!", 50, ref skip);
+                    Thread.Sleep(2000);
                     break;
+                }
+
+                if (key == ConsoleKey.P)
+                {
+                    SaveGame(hero, map, items, currentLevel);
+                    Console.WriteLine("Game saved!");
+                    Thread.Sleep(1000);
                 }
 
                 if (key == ConsoleKey.Tab)
@@ -174,10 +192,18 @@ namespace TreasureHuntGame
                 switch (key)
                 {
                     case ConsoleKey.W: newX--; hero.LastTraversalDirection = 1; break;
+                    case ConsoleKey.UpArrow: newX--; hero.LastTraversalDirection = 1; break;
+
                     case ConsoleKey.A: newY--; hero.LastTraversalDirection = 1; break;
+                    case ConsoleKey.LeftArrow: newY--; hero.LastTraversalDirection = 1; break;
+
                     case ConsoleKey.S: newX++; hero.LastTraversalDirection = 2; break;
+                    case ConsoleKey.DownArrow: newX++; hero.LastTraversalDirection = 2; break;
+
                     case ConsoleKey.D: newY++; hero.LastTraversalDirection = 2; break;
-                    default: Console.WriteLine("Invalid input! Use W, A, S, or D to move."); continue;
+                    case ConsoleKey.RightArrow: newY++; hero.LastTraversalDirection = 2; break;
+
+                    default: Console.WriteLine("Invalid input! "); continue;
                 }
 
                 if (!IsValidMove(map, newX, newY))
@@ -192,12 +218,20 @@ namespace TreasureHuntGame
 
                 if (!hero.IsAlive())
                 {
-                    Console.WriteLine("You have perished. Game Over.");
+                    Console.Clear();
+                    bool skip = false;
+                    TypewriterEffect("You have died. Game Over.", 50, ref skip);
+                    Thread.Sleep(1000);
+                    // Reset hero to initial game values before saving
+                    hero = new Hero();
+                    currentLevel = 1;
+                    map.LoadMapFromFile(currentLevel);
+                    SaveGame(hero, map, items, currentLevel);
                     gameRunning = false;
                 }
 
             } while (gameRunning);
-
+            Console.Clear();
             Console.WriteLine("Thanks for playing!");
         }
 
@@ -222,18 +256,51 @@ namespace TreasureHuntGame
         static void ShowIntro()
         {
             Console.Clear();
-            TypewriterEffect("You are Nathan Drake, a legendary treasure hunter.", 50);
-            Thread.Sleep(1000);
-            TypewriterEffect("Your mission: Discover Blackbeard’s legendary treasure.", 50);
-            Thread.Sleep(1000);
-            TypewriterEffect("But beware: traps, puzzles, and rival treasure hunters stand in your way.", 50);
-            Thread.Sleep(1000);
-            TypewriterEffect("Use your skills: Strength for combat, Agility for traps, and Intelligence for puzzles.", 50);
-            Thread.Sleep(1000);
-            TypewriterEffect("Press 'S' to continue...", 50);
 
-            if (Console.ReadKey(true).Key == ConsoleKey.S) return;
+            bool skip = false;
+
+            // Run a separate task to monitor for key presses
+            Task.Run(() =>
+            {
+                while (!skip)
+                {
+                    if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.S)
+                    {
+                        skip = true;
+                    }
+                }
+            });
+
+            TypewriterEffect("Press 'S' to skip this intro.", 0, ref skip);
+            if (skip) return;
+            Thread.Sleep(2000);
+            Console.Clear();
+
+            TypewriterEffect("You are Nathan Drake, a legendary treasure hunter.", 25, ref skip);
+            if (skip) return;
+
+            Thread.Sleep(1000);
+            TypewriterEffect("Your mission: Discover Blackbeard’s legendary treasure.", 25, ref skip);
+            if (skip) return;
+
+            Thread.Sleep(1000);
+            TypewriterEffect("To enter the next cave, you need to find the Jewel and the Key.", 25, ref skip);
+            if (skip) return;
+
+            Thread.Sleep(1000);
+            TypewriterEffect("The Key will unlock the door to advance, and the Jewels will unlock the treasure at the end.", 25, ref skip);
+            if (skip) return;
+
+            Thread.Sleep(1000);
+            TypewriterEffect("Use your inventory wisely to survive and succeed in your quest.", 25, ref skip);
+            if (skip) return;
+
+            Thread.Sleep(3000);
+
+            return;
         }
+
+
 
         static void SaveGame(Hero hero, Map map, Items items, int level)
         {
@@ -298,10 +365,11 @@ namespace TreasureHuntGame
             return true;
         }
 
-        static void TypewriterEffect(string text, int delay = 15)
+        static void TypewriterEffect(string text, int delay, ref bool skip)
         {
             foreach (char c in text)
             {
+                if (skip) return;
                 Console.Write(c);
                 Thread.Sleep(delay);
             }

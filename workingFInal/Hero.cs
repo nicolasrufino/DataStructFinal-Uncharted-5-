@@ -27,8 +27,8 @@ namespace TreasureHuntGame
         {
             
             Health = 100;
-            Food = 70;
-            Water = 70;
+            Food = 75;
+            Water = 75;
 
 
             PositionX = 9;

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace TreasureHuntGame
 {
@@ -51,18 +52,26 @@ namespace TreasureHuntGame
                         '0' => 0,   // Empty space
                         'D' => 2,   // Door
                         'K' => 3,   // Key
-                        'W' => 25,   // Water
+                        'W' => 15,  // Water
                         'T' => 5,   // Trap (invisible to player)
                         '#' => -1,  // Wall
                         'J' => 6,   // Jewel
                         'F' => 7,   // Food
                         '1' => 8,   // Transition to level 1
+                        '-' => 21,  //Level 1 indicator
                         '2' => 9,   // Transition to level 2
+                        '=' => 22,  //Level 2 *PART 1* Indicator 
                         '3' => 10,  // Transition to level 3
+                        ')' => 23,  //Level 3 indicator
                         '4' => 11,  // Transition to level 4
+                        '*' => 24,  //Level 4 indicator
                         '5' => 12,  // Transition to level 5
+                        '(' => 25,  //Level 5 indicator
                         '6' => 13,  // Transition to level 6
+                        '%' => 26,  //Level 6 indicator
                         '7' => 14,  // Transition to level 7
+                        '!' => 27,
+                        ' ' => 88,  //Level 7 indicator
                         _ => -1     // Unknown symbols default to wall
                     };
 
@@ -87,8 +96,33 @@ namespace TreasureHuntGame
         {
             if (MapGrid == null)
             {
-                Console.WriteLine("Error: Map is not loaded.");
+                Console.WriteLine("Error 404: Map is not loaded.");
                 return;
+            }
+
+            // Check if the hero is stepping on an interactable tile
+            int currentTile = MapGrid[heroX, heroY];
+            switch (currentTile)
+            {
+                case 3: // Key
+                    Console.WriteLine("You picked up a key!");
+                    MapGrid[heroX, heroY] = 0; // convert to empty space
+                    break;
+                case 25: // Water
+                    Console.WriteLine("You collected water!");
+                    MapGrid[heroX, heroY] = 0; // convert to empty space
+                    break;
+                case 6: // Jewel
+                    Console.WriteLine("You collected a jewel!");
+                    MapGrid[heroX, heroY] = 0; // convert to empty space
+                    break;
+                case 7: // Food
+                    Console.WriteLine("You collected food!");
+                    MapGrid[heroX, heroY] = 0; // convert to empty space
+                    break;
+                default:
+                    // do nothing if not one of those tiles
+                    break;
             }
 
             Console.Clear();
@@ -107,18 +141,26 @@ namespace TreasureHuntGame
                             0 => "⬛ ", // empty space
                             -1 => "🔳 ", // wall
                             2 => "🚪 ", // door
-                            3 => "🗝️  ", //key
-                            25 => "🥤 ", // water
-                            5 => "⬛ ", // trap invisble ofc
+                            3 => "🗝️  ", // key
+                            15 => "🥤 ", // water
+                            5 => "⬛ ", // trap invisible
                             6 => "💎 ", // jewel
                             7 => "🍗 ", // food
                             8 => "⬛ ", // transition to level 1
-                            9 => "⬛ ", // transition to level 2
-                            10 => "⬛ ", // transition to level 3
-                            11 => "⬛ ", // transition to level 4
-                            12 => "⬛ ", // transition to level 5
-                            13 => "⬛ ", // transition to level 6
-                            14 => "⬛ ", // transition to level 7
+                            21 => "\u001b[47;30m ---------- CAVE: 1 ---------- \u001b[0m", // white background, black text
+                            9 => "⬛ ", // transition to cave 2
+                            22 => "\u001b[47;30m ---------- CAVE: 2 ---------- \u001b[0m", // white background, black text
+                            10 => "⬛ ", // transition to cave 3
+                            23 => "\u001b[47;30m ---------- CAVE: 3 ---------- \u001b[0m", // white background, black text
+                            11 => "⬛ ", // transition to cave 4
+                            24 => "\u001b[47;30m ---------- CAVE: 4 ---------- \u001b[0m", // white background, black text
+                            12 => "⬛ ", // transition to cave 5
+                            25 => "\u001b[47;30m ---------- CAVE: 5 ---------- \u001b[0m", // white background, black text
+                            13 => "⬛ ", // transition to cave 6
+                            26 => "\u001b[47;30m ---------- CAVE: 6 ---------- \u001b[0m", // white background, black text
+                            14 => "⬛ ", // transition to cave 7
+                            27 => "\u001b[47;30m ---------- CAVE: 7 ---------- \u001b[0m", // white background, black text
+                            88 => " ",
                             _ => "⬜ "  // idk
                         });
                     }
@@ -126,6 +168,7 @@ namespace TreasureHuntGame
                 Console.WriteLine();
             }
         }
+
 
         public bool IsRoomVisited(int x, int y)
         {
@@ -180,7 +223,7 @@ namespace TreasureHuntGame
                 }
                 else
                 {
-                    Console.WriteLine("You need a key to unlock this door.");
+                    Console.WriteLine("You need a key to unlock this path.");
                     return;
                 }
             }
@@ -196,7 +239,9 @@ namespace TreasureHuntGame
 
             if (MapGrid[x, y] == 5) // Trap (invisible)
             {
+                Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine("You stepped on a trap! You take 10 damage.");
+                Console.ResetColor();
                 hero.TakeDamage(10);
             }
         }
